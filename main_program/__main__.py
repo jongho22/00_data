@@ -24,7 +24,7 @@ def result() :
         s = []
         e = []
         # csv파일 읽어서 html로 값 전송
-        with open(f'C:/Users/g/ACIN_public/00_data/main_program/static/search.csv', 'r',newline='', encoding='utf8') as f:
+        with open(f'../main_program/static/search.csv', 'r',newline='', encoding='utf8') as f:
             re = csv.reader(f)
             for i in re :
                 l.append(i[0]+i[1]+i[2])
@@ -41,7 +41,7 @@ def guide() :
 @app.route('/graph', methods=['GET', 'POST'])
 def graph():
     
-    file = f'C:/Users/g/ACIN_public/00_data/main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}__{end_date[:6]}.json'
+    file = f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}__{end_date[:6]}.json'
     while True :
         if os.path.isfile(file) :
             print("-"*30)
@@ -51,7 +51,7 @@ def graph():
             print("-"*30)
 
             ## 전처리 후 예측
-            processing = Processing_json(f'C:/Users/g/ACIN_public/00_data/main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}__{end_date[:6]}.json')
+            processing = Processing_json(f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}__{end_date[:6]}.json')
             processed_dic = processing.dateNList()
 
             print(processed_dic)
@@ -237,7 +237,7 @@ def graph():
             print(resultList)
 
             #csv저장 = DB역할 
-            with open(f'C:/Users/g/ACIN_public/00_data/main_program/static/search.csv', 'a',newline='', encoding='utf8') as f:
+            with open(f'../main_program/static/search.csv', 'a',newline='', encoding='utf8') as f:
                 wr = csv.writer(f)
                 wr.writerow([search,start_date,end_date])
             
@@ -253,7 +253,7 @@ def graph():
             plt.tight_layout()
             #plt.ylim(0,max(max(happy),max(bad)))
             #C:\Users\g\ACIN_public\00_data\main_program\static\images
-            plt.savefig(f'C:/Users/g/ACIN_public/00_data/main_program/static/images/{search}{start_date}{end_date}happy.jpg')
+            plt.savefig(f'../main_program/static/images/{search}{start_date}{end_date}happy.jpg')
             plt.clf()
             # 부정 그래프
             plt.plot(resultList,bad,color='red',linestyle='-',marker='o')
@@ -261,7 +261,7 @@ def graph():
             plt.title(f'{search} n graph', )  # 그래프 제목 설정
             plt.ylabel('bad_num',)  # y축에 설명 추가
             plt.tight_layout()
-            plt.savefig(f'C:/Users/g/ACIN_public/00_data/main_program/static/images/{search}{start_date}{end_date}bad.jpg')
+            plt.savefig(f'../main_program/static/images/{search}{start_date}{end_date}bad.jpg')
             plt.clf()
             # 관심도 그래프
             plt.plot(resultList,all_n,color='green',linestyle='-',marker='o')
@@ -269,7 +269,7 @@ def graph():
             plt.title(f'{search} interest index graph', )  # 그래프 제목 설정
             plt.ylabel('interest index',)  # y축에 설명 추가
             plt.tight_layout()
-            plt.savefig(f'C:/Users/g/ACIN_public/00_data/main_program/static/images/{search}{start_date}{end_date}all.jpg')
+            plt.savefig(f'../main_program/static/images/{search}{start_date}{end_date}all.jpg')
             plt.clf()
             return render_template("./graph_page.html", value = result,happy_value = happy_num,bad_value = bad_num, value_search = search, search_day = search_day)
 
@@ -300,7 +300,7 @@ def goo():
         print(search, start_date, end_date)
 
         #크롤러 실행 
-        file = f'C:/Users/g/ACIN_public/00_data/main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}__{end_date[:6]}.json'
+        file = f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}__{end_date[:6]}.json'
         threading.Thread(target=start.main, args=(search, start_date, end_date,)).start()
         print("[ 스레드 크롤러가 실행 되었습니다. ]")
 
