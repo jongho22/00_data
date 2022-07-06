@@ -16,6 +16,9 @@ import csv
 from utils.processing_json import Processing_json
 from utils.predict import Predict 
 
+import matplotlib as mpl
+print(mpl.matplotlib_fname())
+print("-"*10)
 #누적 그래프 결과 페이지
 @app.route('/resultPage', methods=['GET', 'POST'])
 def result() :
@@ -250,8 +253,8 @@ def graph():
             plt.plot(resultList,happy,color='blue',linestyle='-',marker='o')
             #plt.plot(resultList,bad,color='red',linestyle='-',marker='o')
             plt.xticks(resultList, rotation='90')  # x축 라벨의 이름 pow지움
-            plt.title(f'{search} p graph', )  # 그래프 제목 설정
-            plt.ylabel('happy_num',)  # y축에 설명 추가
+            plt.title(f'positive graph', )  # 그래프 제목 설정
+            plt.ylabel('good_num',)  # y축에 설명 추가
             plt.tight_layout()
             #plt.ylim(0,max(max(happy),max(bad)))
             #C:\Users\g\ACIN_public\00_data\main_program\static\images
@@ -260,7 +263,7 @@ def graph():
             # 부정 그래프
             plt.plot(resultList,bad,color='red',linestyle='-',marker='o')
             plt.xticks(resultList, rotation='90')  # x축 라벨의 이름 pow지움
-            plt.title(f'{search} n graph', )  # 그래프 제목 설정
+            plt.title(f'negative graph', )  # 그래프 제목 설정
             plt.ylabel('bad_num',)  # y축에 설명 추가
             plt.tight_layout()
             plt.savefig(f'../main_program/static/images/{start_date}{end_date}{search}bad.jpg')
@@ -268,7 +271,7 @@ def graph():
             # 관심도 그래프
             plt.plot(resultList,all_n,color='green',linestyle='-',marker='o')
             plt.xticks(resultList, rotation='90')  # x축 라벨의 이름 pow지움
-            plt.title(f'{search} interest index graph', )  # 그래프 제목 설정
+            plt.title(f'interest index graph', )  # 그래프 제목 설정
             plt.ylabel('interest index',)  # y축에 설명 추가
             plt.tight_layout()
             plt.savefig(f'../main_program/static/images/{start_date}{end_date}{search}all.jpg')
