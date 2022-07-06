@@ -21,9 +21,6 @@ from utils.predict import Predict
 def result() :
     if request.method == 'GET':
         l = []
-        s = []
-        e = []
-        new_l = []
         
         # csv파일 읽어서 html로 값 전송
         with open(f'../main_program/static/search.csv', 'r',newline='', encoding='utf8') as f:
@@ -36,35 +33,38 @@ def result() :
             # strNew = str(new_l)
 
             for i in re :
-                startDateList = []
-                lastDateList = []
-                startDateNum = i[1]     # 변수에 시작 날짜 저장
-                lastDateNum = i[2]      # 변수에 마지막 날짜 저장
+                l.append(i[1]+i[2]+i[0])
+            l.reverse()
+                #startDateList = []
+                #lastDateList = []
+                #startDateNum = i[1]     # 변수에 시작 날짜 저장
+                #lastDateNum = i[2]      # 변수에 마지막 날짜 저장
 
                 # 각 날짜를 리스트에 끊어서 저장
                 # ex) 20220627 = ['2', '0', '2', '2', '0', '6', '2', '7']
-                for y in (startDateNum):
-                    startDateList.append(y)
-                for y in (lastDateNum):
-                    lastDateList.append(y)
+                #for y in (startDateNum):
+                #    startDateList.append(y)
+                #for y in (lastDateNum):
+                #    lastDateList.append(y)
 
-                startYY = startDateList[0] + startDateList[1] + startDateList[2] + startDateList[3]
-                startMM = startDateList[4] + startDateList[5]
-                startDD = startDateList[6] + startDateList[7]
-                lastYY = lastDateList[0] + lastDateList[1] + lastDateList[2] + lastDateList[3]
-                lastMM = lastDateList[4] + lastDateList[5]
-                lastDD = lastDateList[6] + lastDateList[7]
+                #startYY = startDateList[0] + startDateList[1] + startDateList[2] + startDateList[3]
+                #startMM = startDateList[4] + startDateList[5]
+                #startDD = startDateList[6] + startDateList[7]
+                #lastYY = lastDateList[0] + lastDateList[1] + lastDateList[2] + lastDateList[3]
+                #lastMM = lastDateList[4] + lastDateList[5]
+                #lastDD = lastDateList[6] + lastDateList[7]
 
-                l.append(i[0]+"의 "+startYY+"년 "+startMM+"월 "+startDD+"일 ~ "+lastYY+"년 "+lastMM+"월 "+lastDD+"일까지의 분석 결과입니다.")
-            l.reverse()
+                #l.append(i[0]+"의 "+startYY+"년 "+startMM+"월 "+startDD+"일 ~ "+lastYY+"년 "+lastMM+"월 "+lastDD+"일까지의 분석 결과입니다.")
+            
             print(l)
-        return render_template("./resultPage.html", search_list = l, strNew = strNew)
+        return render_template("./resultPage.html", search_list = l)
 
 #사이트 설명 페이지
 @app.route('/guide', methods=['GET', 'POST'])
 def guide() :
     if request.method == 'GET':
         return render_template("./guide.html")
+
 #모델 실행이 끝난 후 그래프 보여주는 페이지
 @app.route('/graph', methods=['GET', 'POST'])
 def graph():
@@ -261,7 +261,7 @@ def graph():
             happy = happy_num
             bad = bad_num
             all_n = all_num
-            search_day = search + start_date + end_date
+            search_day = start_date + end_date + search 
             print(resultList)
 
             #csv저장 = DB역할 
@@ -281,7 +281,7 @@ def graph():
             plt.tight_layout()
             #plt.ylim(0,max(max(happy),max(bad)))
             #C:\Users\g\ACIN_public\00_data\main_program\static\images
-            plt.savefig(f'../main_program/static/images/{search}{start_date}{end_date}happy.jpg')
+            plt.savefig(f'../main_program/static/images/{start_date}{end_date}{search}happy.jpg')
             plt.clf()
             # 부정 그래프
             plt.plot(resultList,bad,color='red',linestyle='-',marker='o')
@@ -289,7 +289,7 @@ def graph():
             plt.title(f'{search} n graph', )  # 그래프 제목 설정
             plt.ylabel('bad_num',)  # y축에 설명 추가
             plt.tight_layout()
-            plt.savefig(f'../main_program/static/images/{search}{start_date}{end_date}bad.jpg')
+            plt.savefig(f'../main_program/static/images/{start_date}{end_date}{search}bad.jpg')
             plt.clf()
             # 관심도 그래프
             plt.plot(resultList,all_n,color='green',linestyle='-',marker='o')
@@ -297,7 +297,7 @@ def graph():
             plt.title(f'{search} interest index graph', )  # 그래프 제목 설정
             plt.ylabel('interest index',)  # y축에 설명 추가
             plt.tight_layout()
-            plt.savefig(f'../main_program/static/images/{search}{start_date}{end_date}all.jpg')
+            plt.savefig(f'../main_program/static/images/{start_date}{end_date}{search}all.jpg')
             plt.clf()
             return render_template("./graph_page.html", value = result,happy_value = happy_num,bad_value = bad_num, value_search = search, search_day = search_day)
 
