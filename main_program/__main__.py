@@ -26,35 +26,9 @@ def result() :
         with open(f'../main_program/static/search.csv', 'r',newline='', encoding='utf8') as f:
             re = csv.reader(f)
 
-            # for i in re :
-            #     new_l.append(i[0]+i[1]+i[2])
-            #     new_l = new_l[0]
-            # new_l.reverse()
-            # strNew = str(new_l)
-
             for i in re :
                 l.append(i[1]+i[2]+i[0])
             l.reverse()
-                #startDateList = []
-                #lastDateList = []
-                #startDateNum = i[1]     # 변수에 시작 날짜 저장
-                #lastDateNum = i[2]      # 변수에 마지막 날짜 저장
-
-                # 각 날짜를 리스트에 끊어서 저장
-                # ex) 20220627 = ['2', '0', '2', '2', '0', '6', '2', '7']
-                #for y in (startDateNum):
-                #    startDateList.append(y)
-                #for y in (lastDateNum):
-                #    lastDateList.append(y)
-
-                #startYY = startDateList[0] + startDateList[1] + startDateList[2] + startDateList[3]
-                #startMM = startDateList[4] + startDateList[5]
-                #startDD = startDateList[6] + startDateList[7]
-                #lastYY = lastDateList[0] + lastDateList[1] + lastDateList[2] + lastDateList[3]
-                #lastMM = lastDateList[4] + lastDateList[5]
-                #lastDD = lastDateList[6] + lastDateList[7]
-
-                #l.append(i[0]+"의 "+startYY+"년 "+startMM+"월 "+startDD+"일 ~ "+lastYY+"년 "+lastMM+"월 "+lastDD+"일까지의 분석 결과입니다.")
             
             print(l)
         return render_template("./resultPage.html", search_list = l)
@@ -313,11 +287,13 @@ def goo():
     
     if request.method == 'GET':
         return render_template("./index.html")
+
     elif request.method == 'POST':
         global search
         global start_date
         global end_date
         global file
+       
         search = request.form.get('keyword')
         start_date = request.form.get('start_date')
         end_date = request.form.get('end_date')
@@ -326,6 +302,36 @@ def goo():
         end_date = end_date[:4] + end_date[5:7] + end_date[8:]
         print("[검색어, 날짜가 입력 되었습니다.]")
         print(search, start_date, end_date)
+
+        #검색 횟수 저장 csv (인기검색어) 잠정 보류
+        #with open(f'../main_program/static/search_num.csv', 'a',newline='', encoding='utf8') as f:
+        #        wr = csv.writer(f)
+        #        wr.writerow([search])
+        #총 검색 횟수 계산
+        #search_num_list = []
+        #search_num_list2 = []
+        #with open(f'../main_program/static/search_num.csv', 'r',newline='', encoding='utf8') as f:
+        #    re = csv.reader(f)
+        #    
+        #    for i in re :
+        #        
+        #        search_num_list.append(i[0])
+
+        #        if i[0] not in search_num_list2 :
+        #            search_num_list2.append(i[0])
+                
+
+        #        #for j in range(len(search_num_list2)) :
+        #        if i[0] 
+        #        s = str(i[0])+"," + str(search_num_list.count(i[0]))
+
+        #        print(s)
+                #for j in range(search_num_list)
+                #if i[0] in search_num_list :
+                #   s = str(i[0]) + str 
+                #print(search_num_list)
+                #print(s)
+            
 
         #크롤러 실행 
         file = f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}__{end_date[:6]}.json'
