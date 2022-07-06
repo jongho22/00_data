@@ -23,14 +23,42 @@ def result() :
         l = []
         s = []
         e = []
+        new_l = []
+        
         # csv파일 읽어서 html로 값 전송
         with open(f'../main_program/static/search.csv', 'r',newline='', encoding='utf8') as f:
             re = csv.reader(f)
+
+            # for i in re :
+            #     new_l.append(i[0]+i[1]+i[2])
+            #     new_l = new_l[0]
+            # new_l.reverse()
+            # strNew = str(new_l)
+
             for i in re :
-                l.append(i[0]+i[1]+i[2])
+                startDateList = []
+                lastDateList = []
+                startDateNum = i[1]     # 변수에 시작 날짜 저장
+                lastDateNum = i[2]      # 변수에 마지막 날짜 저장
+
+                # 각 날짜를 리스트에 끊어서 저장
+                # ex) 20220627 = ['2', '0', '2', '2', '0', '6', '2', '7']
+                for y in (startDateNum):
+                    startDateList.append(y)
+                for y in (lastDateNum):
+                    lastDateList.append(y)
+
+                startYY = startDateList[0] + startDateList[1] + startDateList[2] + startDateList[3]
+                startMM = startDateList[4] + startDateList[5]
+                startDD = startDateList[6] + startDateList[7]
+                lastYY = lastDateList[0] + lastDateList[1] + lastDateList[2] + lastDateList[3]
+                lastMM = lastDateList[4] + lastDateList[5]
+                lastDD = lastDateList[6] + lastDateList[7]
+
+                l.append(i[0]+"의 "+startYY+"년 "+startMM+"월 "+startDD+"일 ~ "+lastYY+"년 "+lastMM+"월 "+lastDD+"일까지의 분석 결과입니다.")
             l.reverse()
             print(l)
-        return render_template("./resultPage.html", search_list = l, start_day = s, end_day = e)
+        return render_template("./resultPage.html", search_list = l, strNew = strNew)
 
 #사이트 설명 페이지
 @app.route('/guide', methods=['GET', 'POST'])
