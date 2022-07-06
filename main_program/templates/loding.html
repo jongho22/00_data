@@ -15,6 +15,9 @@
     .italicText{
             font-style: italic;
         }
+    .imgCenter {
+        text-align:center;
+    }
 </style>
 <style type="text/css">
     #load {
@@ -76,57 +79,33 @@
     </div>
 <center>
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="row">
-                <div class="col-3"></div>
-                <div class="col-6">
-                    <br>
-                    <div class="text-center">
-                        <div class="italicText">
-                            <font size="2">감성 분석을 기반으로 하는 동향분석 서비스 입니다.</font>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <!-- 로딩화면
-                            <div id="load">
-                                <img src="../static/images/icons8-spinner.gif" alt="loading">
-                                <a target="_blank" href="https://icons8.com/icon/JsEIppO8i4X0/spinner">Spinner</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
-                            </div>
-                            -->
-                            <div col sm-3>
-                                <img src="../static/images/icons8-spinner.gif" alt="loading">
-                            </div>
-                            
-    
-                            {{search}}에 대해서 관련 정보를 수집하는 중입니다.
-                            
-
-                            버튼을 누르면 감성 분석을 시작합니다.
-                            (크롤러가 완전히 실행이 끝나지 않았으면 페이지 로딩이 걸립니다.)
-
-                            {% if value_on != 1 %} 
-                                <b> 크롤링이 끝났습니다. </b>
-                                <a href="/graph" class="card-link">감성분석 시작</a>
-                            {% else %} 
-                                <b>아직 크롤링이 끝나지 않았습니다.</b>
-                            {% endif %}
-                        </div>                                                    
-                    </div>
-                </div>
-                <div class="col-3"></div>
+        <div class="row">
+            <div class="italicText">
+                <br>
+                <font size="2">감성 분석을 기반으로 하는 동향분석 서비스 입니다.</font>
             </div>
+            <br>
+            <div>
+                <img src="../static/images/icons8-spinner.gif" alt="loading">
+            </div>
+            <br>
+            <h4>{{search}}에 대한 댓글을 불러오고 있습니다.</h4>
+            {% if value_on != 1 %} 
+                <b> 크롤링이 끝났습니다. 하단 버튼을 눌러주세요.</b>
+                <a href="/graph" class="card-link">감성분석 시작</a>
+            {% else %} 
+                <b>아직 크롤링이 끝나지 않았습니다.</b>
+            {% endif %}
+        </div>
 
-            
-            <hr>
-
-            <!-- 광고 삽입 코드 -->
-            <ins class="kakao_ad_area" style="display:none;" 
-            data-ad-unit    = "DAN-G9r3bF8U0VG5cV6L" 
-            data-ad-width   = "320" 
-            data-ad-height  = "100"></ins> 
-            <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
-            <hr>
-        </div><!--<div class="row justify-content-center">-->
+        <!-- 광고 삽입 코드 -->
+        <hr>
+        <ins class="kakao_ad_area" style="display:none;" 
+        data-ad-unit    = "DAN-G9r3bF8U0VG5cV6L" 
+        data-ad-width   = "320" 
+        data-ad-height  = "100"></ins> 
+        <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
+        <hr>
     </div><!--container-->
 </center>
 
