@@ -25,6 +25,10 @@
         .marginSet {
             margin: 10px;
         }
+        .italicText{
+            font-style: italic;
+            text-align: left;
+        }
     </style>
 
 </head>
@@ -68,33 +72,76 @@
 </div>
 <center>
     <div class="container">
+        <p>
+            DH_SERVICE는 뉴스 기사 댓글을 분석하여 사용자가 검색한 키워드의 동향이 긍정적인지, 부정적인지 분석하는 시스템입니다. 하단 설명을 읽고 사용해주시기 바랍니다. 감사합니다.
+        </p>
         <!-- 첫 번째 -->
         <div class="card" style="width: 100%;">
-            <img src="../static/images/임시사진.png" class="card-img-top" alt="...">
+            <img src="../static/images/indexPagePhoto.jpg" class="card-img-top" alt="...">
             <div class="card-body">
-            <h5 class="cardTitle">1. 첫번째</h5>
-            <p class="cardText">하단에 설명이 들어갈 예정입니다.</p>
+            <h5 class="cardTitle">1. Home(검색) 페이지</h5>
+            <p class="cardText">(1) 검색할 키워드를 입력하십시오.<br>
+                (2) 분석하고 싶은 기간을 선택하십시오.<br>
+                (3) search(검색) 버튼을 클릭해주십시오.
+            </p>
             </div>
         </div>
         <br>
 
         <!-- 두 번째 -->
         <div class="card" style="width: 100%;">
-            <img src="../static/images/임시사진.png" class="card-img-top" alt="...">
+            <img src="../static/images/loadingPagePhoto.jpg" class="card-img-top" alt="...">
             <div class="card-body">
-            <h5 class="cardTitle">2. 두번째</h5>
-            <p class="cardText">하단에 설명이 들어갈 예정입니다.</p>
+            <h5 class="cardTitle">2. 분석 페이지</h5>
+            <p class="cardText">사용자가 입력한 검색어가 포함된 기사의 댓글을 분석하고 있습니다.</p>
             </div>
         </div>
         <br>
+
+        <!-- 세 번째 -->
+        <div class="card" style="width: 100%;">
+            <img src="../static/images/graphPagePhoto.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+            <h5 class="cardTitle">3. 분석 결과 페이지</h5>
+            <p class="cardText">(1) 사용자가 입력한 검색어를 표시합니다.<br>
+                (2) 해당 키워드의 긍정적인 척도를 나타내는 그래프입니다.<br>
+                (3) 해당 키워드의 부정적인 척도를 나타내는 그래프입니다.<br>
+                (4) 해당 키워드의 관심 척도를 나타내는 그래프입니다.<br>
+                <font size="2"><div class="italicText">* 댓글이 없거나, 긍정 또는 부정의 척도가 0인 경우, 해당 날짜의 결과 값이 0으로 표시될 수 있습니다.</div></font>
+            </p>
+            </div>
+        </div>
+        <br>
+
+        <!-- 네 번째 -->
+        <div class="card" style="width: 100%;">
+            <img src="../static/images/resultPagePhoto.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+            <h5 class="cardTitle">4. Result(결과) 페이지</h5>
+            <p class="cardText">(1) 지난 결과 값을 열람하려면 상단 바에서 Result(결과) 버튼을 누르십시오.<br>
+                (2) 사용자가 최근에 분석한 결과부터 보여줍니다.
+            </p>
+            </div>
+        </div>
+        <br>
+
+
+
+
+
+
+
+
+
+
         <!-- 광고 삽입 코드 -->
-    <hr>
-    <ins class="kakao_ad_area" style="display:none;" 
-    data-ad-unit    = "DAN-G9r3bF8U0VG5cV6L" 
-    data-ad-width   = "320" 
-    data-ad-height  = "100"></ins> 
-    <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
-    <hr>
+        <hr>
+        <ins class="kakao_ad_area" style="display:none;" 
+        data-ad-unit    = "DAN-G9r3bF8U0VG5cV6L" 
+        data-ad-width   = "320" 
+        data-ad-height  = "100"></ins> 
+        <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
+        <hr>
     </div>
 </center>
 
