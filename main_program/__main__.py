@@ -282,7 +282,10 @@ def graph():
 @app.route('/loding', methods=['GET', 'POST'])
 def lode():
     if request.method == 'GET':
-        return render_template("./loding.html")
+        file = f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}__{end_date[:6]}.json'
+        while True :
+            if os.path.isfile(file) :
+                return render_template("./loding2.html")
 
 #처음 시작 페이지
 @app.route('/', methods=['GET', 'POST'])
@@ -339,6 +342,7 @@ def goo():
         #크롤러 실행 
         file = f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}__{end_date[:6]}.json'
         threading.Thread(target=start.main, args=(search, start_date, end_date,)).start()
+        
         print("[ 스레드 크롤러가 실행 되었습니다. ]")
 
         
