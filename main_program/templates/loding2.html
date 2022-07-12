@@ -92,7 +92,11 @@
             <h4>모든 정보를 불러왔습니다. </h4>
             {% if value_on != 1 %} 
                 <b> 크롤링이 끝났습니다. 하단 버튼을 눌러 감성 분석을 시작하세요!</b>
-                <a href="/graph" class="card-link">감성분석 시작</a>
+                <br>
+                <br>
+
+                <!--<a href="/graph" class="card-link">감성분석 시작</a>-->
+                <button type="button" class="btn btn-outline-success" onClick="location.href='graph'">감성분석 시작</button>
             {% else %} 
                 <b>아직 크롤링이 끝나지 않았습니다.</b>
             {% endif %}
