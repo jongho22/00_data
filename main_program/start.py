@@ -151,10 +151,7 @@ def main(search, start_date, end_date):
     """
 
 
-    # 멀티 프로세싱 코드  -- 다음 블라인드 때문에 동작x
-    # daumCrawlLinks(search, start_date, end_date, driver_url, chrome_options)
-    # daumCrawlNews(search, start_date, end_date, driver_url, chrome_options)
-    
+    # 멀티 프로세싱 코드  
     naverCrawlLinks(search, start_date, end_date, driver_url, chrome_options)
     naverCrawlNews(search, start_date, end_date, driver_url, chrome_options)
 

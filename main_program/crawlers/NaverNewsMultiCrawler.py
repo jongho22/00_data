@@ -141,15 +141,7 @@ def crawlNews( search, start_date, end_date, driver_url, chrome_options):
     num_of_cpu = cpu_count()
 
     manager = Manager()
-    # news_dic = manager.dict()
 
-    # start_date_ = datetime.date(int(start_date[:4]), int(start_date[4:6]), int(start_date[6:]))
-    # end_date_ = datetime.date(int(end_date[:4]), int(end_date[4:6]), int(end_date[6:])) + datetime.timedelta(days=1)
-
-    # date_list = [str(i).replace('-', '')[0:8] for i in daterange(start_date_, end_date_)]
-
-    # for date in date_list:
-    #     news_dic[date] = manager.dict()
 
     news_queue = []
 
@@ -328,26 +320,27 @@ def crawlNewsProcess( idx, driver_url, chrome_options, news_url_list, news_dic, 
             safe_bot_mode3 = div.find_element_by_xpath('/html/body/div[2]/div/div[2]/div[4]/button')
             safe_bot_mode3.click()
 
-            while True:
-                try:
-                    element = WebDriverWait(driver, 2).until(
-                        EC.presence_of_element_located((By.XPATH, '//*[@id="cbox_module"]/div[2]/div[9]/a')) 
-                    )
+            #더보기 없애기
+            # while True:
+            #     try:
+            #         element = WebDriverWait(driver, 2).until(
+            #             EC.presence_of_element_located((By.XPATH, '//*[@id="cbox_module"]/div[2]/div[9]/a')) 
+            #         )
                     
-                    more_btn = driver.find_element_by_xpath('//*[@id="cbox_module"]/div[2]/div[9]/a')
-                    print("댓글 더보기 클릭")
-                    # more_btn.click()
-                    more_btn.send_keys(Keys.ENTER)
+            #         more_btn = driver.find_element_by_xpath('//*[@id="cbox_module"]/div[2]/div[9]/a')
+            #         print("댓글 더보기 클릭")
+            #         # more_btn.click()
+            #         more_btn.send_keys(Keys.ENTER)
 
-                except TimeoutException:
-                    print("more 버튼 없음 타임아웃")
+            #     except TimeoutException:
+            #         print("more 버튼 없음 타임아웃")
                     
-                    break
+            #         break
 
-                except ElementNotInteractableException:
-                    print("more 버튼 없음")
+            #     except ElementNotInteractableException:
+            #         print("more 버튼 없음")
                     
-                    break
+            #         break
 
             try:
                 element = WebDriverWait(driver, 1).until(
@@ -401,45 +394,45 @@ def crawlNewsProcess( idx, driver_url, chrome_options, news_url_list, news_dic, 
                     print("댓 못가져와서 패스")
                     continue
 
-                if is_exists_reply:
-                    count2 = 0
-                    reply_btn = comment.find_element_by_css_selector(f'a[class="u_cbox_btn_reply"]')
-                    # reply_btn.click()
-                    reply_btn.send_keys(Keys.ENTER)
+                # if is_exists_reply:
+                #     count2 = 0
+                #     reply_btn = comment.find_element_by_css_selector(f'a[class="u_cbox_btn_reply"]')
+                #     # reply_btn.click()
+                #     reply_btn.send_keys(Keys.ENTER)
                     
-                    while True:
-                        try:
-                            element = WebDriverWait(comment, 1).until(
-                                EC.presence_of_element_located((By.CSS_SELECTOR, f'a[class="u_cbox_btn_more"]')) 
-                            )
+                #     # while True:
+                #     #     try:
+                #     #         element = WebDriverWait(comment, 1).until(
+                #     #             EC.presence_of_element_located((By.CSS_SELECTOR, f'a[class="u_cbox_btn_more"]')) 
+                #     #         )
                             
-                            more_btn2 = comment.find_element_by_css_selector(f'a[class="u_cbox_btn_more"]')
-                            # print("답글 더보기 클릭")
-                            more_btn2.send_keys(Keys.ENTER)
+                #     #         more_btn2 = comment.find_element_by_css_selector(f'a[class="u_cbox_btn_more"]')
+                #     #         # print("답글 더보기 클릭")
+                #     #         more_btn2.send_keys(Keys.ENTER)
+
+                #     #     except:
+                #     #         # print("답글 더보기 버튼 없음 타임아웃")
+                #     #         break
+
+
+                replys = []
+                try:
+                    replys = WebDriverWait(reply, 1).until(EC.presence_of_element_located((By.CSS_SELECTOR , f'li[class="u_cbox_comment"]')))
+
+                    for reply in replys:
+                        try:
+                            text = WebDriverWait(reply, 1).until(EC.presence_of_element_located((By.CSS_SELECTOR , 'span[class="u_cbox_contents"] > p'))).text
+                            if text != "작성자에 의해 삭제된 댓글입니다." and text != "클린봇이 부적절한 표현을 감지한 댓글입니다." and text != "운영규정 미준수로 인해 삭제된 댓글입니다.":
+                                reply_texts.append( text )
+                                count+=1
+                                count2+=1
+                                print(f"수집한 댓글 : {count}개\t{reply_count}개 중 {count2}개 수집")
 
                         except:
-                            # print("답글 더보기 버튼 없음 타임아웃")
-                            break
-
-
-                    replys = []
-                    try:
-                        replys = WebDriverWait(reply, 1).until(EC.presence_of_element_located((By.CSS_SELECTOR , f'li[class="u_cbox_comment"]')))
-
-                        for reply in replys:
-                            try:
-                                text = WebDriverWait(reply, 1).until(EC.presence_of_element_located((By.CSS_SELECTOR , 'span[class="u_cbox_contents"] > p'))).text
-                                if text != "작성자에 의해 삭제된 댓글입니다." and text != "클린봇이 부적절한 표현을 감지한 댓글입니다." and text != "운영규정 미준수로 인해 삭제된 댓글입니다.":
-                                    reply_texts.append( text )
-                                    count+=1
-                                    count2+=1
-                                    print(f"수집한 댓글 : {count}개\t{reply_count}개 중 {count2}개 수집")
-
-                            except:
-                                print("답글 못가져와서 패스")
-                                continue
-                    except:
-                        pass
+                            print("답글 못가져와서 패스")
+                            continue
+                except:
+                    pass
 
                     
                     # reply_btn.send_keys(Keys.ENTER)

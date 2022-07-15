@@ -10,7 +10,9 @@ import random
 import os, glob, time
 import start
 from tqdm import tqdm
-
+from matplotlib import font_manager, rc 
+fn_name = font_manager.FontProperties(fname='c:/Windows/Fonts/malgun.ttf').get_name()
+rc('font',family=fn_name)
 import csv
 
 from utils.processing_json import Processing_json
@@ -65,6 +67,7 @@ def graph():
                 predict = Predict()
 
                 result_dic = {}
+                result_dic2 = {}
                 result_happy = []
                 result_bad = []
 
@@ -81,17 +84,19 @@ def graph():
                             negative +=1
                     if missing_value:
                         result_dic[key] = -1
+                        result_dic2[key] = -1
                     else:
-                        result_dic[key] = positive/(positive+negative)*100
+                        result_dic[key] = round(positive/(positive+negative)*100)
+                        result_dic2[key] = round(negative/(positive+negative)*100)
                     
                     result_happy.append(positive)
                     result_bad.append(negative)
                     
                     positive = 0
                     negative = 0
-                return result_dic,result_happy,result_bad   #ex) {'20220623':70, '20220624':-1(결측값)}
-            
-            result,happy_num,bad_num = dic_to_result(processed_dic)
+                return result_dic,result_happy,result_bad,result_dic2   #ex) {'20220623':70, '20220624':-1(결측값)}
+
+            result,happy_num,bad_num,result2 = dic_to_result(processed_dic)
             all_num = [x+y for x,y in zip(happy_num, bad_num)]
 
             print("감성분석 결과 입니다.")
@@ -99,6 +104,25 @@ def graph():
             print(happy_num)
             print(bad_num)
             print(all_num)
+
+            per = []
+            per2 = []
+
+            for d in result.keys():
+                if result[str(d)] == -1 :
+                    per.append(0)
+                else :
+                    per.append(result[str(d)])
+
+            for d in result2.keys():
+                if result2[str(d)] == -1 :
+                    per2.append(0)
+                else :
+                    per2.append(result2[str(d)])
+
+
+            print(per)
+            print(per2)
 
             # 그래프 그리기--------------------------------------------
             startDate = start_date
@@ -239,6 +263,7 @@ def graph():
             bad = bad_num
             all_n = all_num
             search_day = start_date + end_date + search 
+            
             print(resultList)
 
             #csv저장 = DB역할 
@@ -249,31 +274,35 @@ def graph():
             #그래프 그린후 저장
 
             plt.clf()
-            #긍정 그래프
-            plt.plot(resultList,happy,color='blue',linestyle='-',marker='o')
+            #그래프
+            plt.plot(resultList,per,color='blue',linestyle='-',marker='o')
+            plt.plot(resultList,per2,color='red',linestyle='-',marker='o')
             #plt.plot(resultList,bad,color='red',linestyle='-',marker='o')
-            plt.xticks(resultList, rotation='90')  # x축 라벨의 이름 pow지움
-            plt.title(f'positive graph', )  # 그래프 제목 설정
-            plt.ylabel('good_num',)  # y축에 설명 추가
+            #resultList = [i for i in resultList[1:len(resultList)] if int(i)%2 == 0]
+            plt.xticks(resultList, rotation='70')  # x축 라벨의 이름 pow지움
+            plt.ylim([0,100])
+            plt.title(f'{search} 일별 동향 그래프', )  # 그래프 제목 설정
+            #plt.ylabel('퍼센트',)  # y축에 설명 추가
             plt.tight_layout()
-            #plt.ylim(0,max(max(happy),max(bad)))
-            #C:\Users\g\ACIN_public\00_data\main_program\static\images
-            plt.savefig(f'../main_program/static/images/{start_date}{end_date}{search}happy.jpg')
-            plt.clf()
-            # 부정 그래프
-            plt.plot(resultList,bad,color='red',linestyle='-',marker='o')
-            plt.xticks(resultList, rotation='90')  # x축 라벨의 이름 pow지움
-            plt.title(f'negative graph', )  # 그래프 제목 설정
-            plt.ylabel('bad_num',)  # y축에 설명 추가
-            plt.tight_layout()
-            plt.savefig(f'../main_program/static/images/{start_date}{end_date}{search}bad.jpg')
+            plt.gca().spines['right'].set_visible(False) #오른쪽 테두리 제거
+            plt.gca().spines['top'].set_visible(False) #위 테두리 제거
+            plt.gca().spines['left'].set_visible(False) #왼쪽 테두리 제거
+            plt.gca().spines['bottom'].set_color('#00517C') #x축 색상
+            #plt.gca().set_facecolor('#E6F0F8') #배경색
+            plt.legend(['긍정','부정'], title_fontsize = 10)
+            plt.savefig(f'../main_program/static/images/{start_date}{end_date}{search}graph.jpg')
             plt.clf()
             # 관심도 그래프
             plt.plot(resultList,all_n,color='green',linestyle='-',marker='o')
-            plt.xticks(resultList, rotation='90')  # x축 라벨의 이름 pow지움
-            plt.title(f'interest index graph', )  # 그래프 제목 설정
-            plt.ylabel('interest index',)  # y축에 설명 추가
+            plt.xticks(resultList, rotation='70')  # x축 라벨의 이름 pow지움
+            plt.title(f'{search} 일별 관심도 그래프', )  # 그래프 제목 설정
+            plt.ylim([0,len(all_n)])
             plt.tight_layout()
+            plt.gca().spines['right'].set_visible(False) #오른쪽 테두리 제거
+            plt.gca().spines['top'].set_visible(False) #위 테두리 제거
+            plt.gca().spines['left'].set_visible(False) #왼쪽 테두리 제거
+            plt.gca().spines['bottom'].set_color('#00517C') #x축 색상
+            plt.legend(['댓글 총 개수'], title_fontsize = 10)
             plt.savefig(f'../main_program/static/images/{start_date}{end_date}{search}all.jpg')
             plt.clf()
             return render_template("./graph_page.html", value = result,happy_value = happy_num,bad_value = bad_num, value_search = search, search_day = search_day)
