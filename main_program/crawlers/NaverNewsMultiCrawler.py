@@ -98,14 +98,14 @@ def crawlLinksProcess(date_list, driver_url, chrome_options, search, url_list):
 
             div, news = None, None
 
-            div = driver.find_element_by_xpath('//*[@id="main_pack"]/div[2]')
+            div = driver.find_element(By.XPATH,'//*[@id="main_pack"]/div[2]')
 
             if div.get_attribute('class') == 'api_noresult_wrap':
                 break
 
-            div = driver.find_element_by_xpath('//*[@id="main_pack"]/section/div/div[2]/ul')
+            div = driver.find_element(By.XPATH,'//*[@id="main_pack"]/section/div/div[2]/ul')
 
-            news = div.find_elements_by_css_selector('a[class="info"]')
+            news = div.find_elements(By.CSS_SELECTOR,'a[class="info"]')
 
             news = list(set(news))
 
@@ -282,15 +282,15 @@ def crawlNewsProcess( idx, driver_url, chrome_options, news_url_list, news_dic, 
                 
                 continue
 
-            div = driver.find_element_by_xpath('//*[@id="cbox_module_wai_u_cbox_content_wrap_tabpanel"]')
+            div = driver.find_element(By.XPATH,'//*[@id="cbox_module_wai_u_cbox_content_wrap_tabpanel"]')
 
-            comment_count = driver.find_element_by_xpath('//*[@id="cbox_module"]/div[2]/div[2]/ul/li[1]/span')
+            comment_count = driver.find_element(By.XPATH,'//*[@id="cbox_module"]/div[2]/div[2]/ul/li[1]/span')
 
             if comment_count == '0':
                 continue
 
 
-            date = driver.find_element_by_css_selector('#ct_wrap ._ARTICLE_DATE_TIME')
+            date = driver.find_element(By.CSS_SELECTOR,'#ct_wrap ._ARTICLE_DATE_TIME')
             date_ = date.text
             
             p = re.compile(r"\d+[.]+\d+[.]+\d+[.]")
@@ -313,11 +313,11 @@ def crawlNewsProcess( idx, driver_url, chrome_options, news_url_list, news_dic, 
                 
                 pass
 
-            safe_bot_mode1 = div.find_element_by_xpath('//*[@id="cbox_module"]/div[2]/div[7]/a')
+            safe_bot_mode1 = div.find_element(By.XPATH,'//*[@id="cbox_module"]/div[2]/div[7]/a')
             safe_bot_mode1.click()
-            safe_bot_mode2 = div.find_element_by_xpath('//*[@id="cleanbot_dialog_checkbox_cbox_module"]')
+            safe_bot_mode2 = div.find_element(By.XPATH,'//*[@id="cleanbot_dialog_checkbox_cbox_module"]')
             safe_bot_mode2.click()
-            safe_bot_mode3 = div.find_element_by_xpath('/html/body/div[2]/div/div[2]/div[4]/button')
+            safe_bot_mode3 = div.find_element(By.XPATH,'/html/body/div[2]/div/div[2]/div[4]/button')
             safe_bot_mode3.click()
 
             #더보기 없애기
@@ -352,10 +352,10 @@ def crawlNewsProcess( idx, driver_url, chrome_options, news_url_list, news_dic, 
                 
                 break
 
-            div = driver.find_element_by_xpath('//*[@id="cbox_module_wai_u_cbox_content_wrap_tabpanel"]')
+            div = driver.find_element(By.XPATH,'//*[@id="cbox_module_wai_u_cbox_content_wrap_tabpanel"]')
         
             # comments = div.find_elements_by_xpath('//li[**starts-with(id,"comment")**]')
-            comments = div.find_elements_by_css_selector('ul>li')
+            comments = div.find_elements(By.CSS_SELECTOR,'ul>li')
             reply_count = 0
 
             for i in range(len(comments)):
