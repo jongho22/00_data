@@ -59,8 +59,6 @@ def graph():
             processing = Processing_json(f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}.json')
             processed_dic = processing.dateNList()
 
-            print(processed_dic)
-
             def dic_to_result(processed_dic):   
                 predict = Predict()
 
@@ -321,8 +319,6 @@ def graph():
                 color = "Reds"
             else:
                 color = "prism"
-            print(h,b)
-            print("-"*80)
 
             #워드 클라우드 생성
             comment_txt.makeCommentTxt.comment(search, start_date, end_date, color)
