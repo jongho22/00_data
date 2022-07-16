@@ -307,6 +307,9 @@ def graph():
             plt.savefig(f'../main_program/static/images/{start_date}{end_date}{search}all.jpg')
             plt.clf()
             
+
+
+            # 긍정이 많은지 부정이 많은지 확인 => 워드 클라우드에 사용
             h=0
             b=0
             
@@ -321,6 +324,9 @@ def graph():
                 color = "Reds"
             else:
                 color = "prism"
+            print(h,b)
+            print("-"*80)
+
             #워드 클라우드 생성
             comment_txt.makeCommentTxt.comment(search, start_date, end_date, color)
 
