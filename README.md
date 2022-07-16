@@ -17,3 +17,4 @@ sklearn
 matplotlib
 wordcloud
 konlpy
+openpyxl
