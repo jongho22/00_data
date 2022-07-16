@@ -14,6 +14,7 @@ from matplotlib import font_manager, rc
 fn_name = font_manager.FontProperties(fname='c:/Windows/Fonts/malgun.ttf').get_name()
 rc('font',family=fn_name)
 import csv
+import comment_txt
 
 from utils.processing_json import Processing_json
 from utils.predict import Predict 
@@ -259,8 +260,8 @@ def graph():
                     resultList.append(str_year_list[i]+str_month_list[i]+ str_date_list[i])
 
             #html에 보내줄 값 저장
-            happy = happy_num
-            bad = bad_num
+            #happy = happy_num
+            #bad = bad_num
             all_n = all_num
             search_day = start_date + end_date + search 
             
@@ -296,7 +297,7 @@ def graph():
             plt.plot(resultList,all_n,color='green',linestyle='-',marker='o')
             plt.xticks(resultList, rotation='70')  # x축 라벨의 이름 pow지움
             plt.title(f'{search} 일별 관심도 그래프', )  # 그래프 제목 설정
-            plt.ylim([0,len(all_n)])
+            plt.ylim([0,max(all_n)])
             plt.tight_layout()
             plt.gca().spines['right'].set_visible(False) #오른쪽 테두리 제거
             plt.gca().spines['top'].set_visible(False) #위 테두리 제거
@@ -305,7 +306,25 @@ def graph():
             plt.legend(['댓글 총 개수'], title_fontsize = 10)
             plt.savefig(f'../main_program/static/images/{start_date}{end_date}{search}all.jpg')
             plt.clf()
-            return render_template("./graph_page.html", value = result,happy_value = happy_num,bad_value = bad_num, value_search = search, search_day = search_day)
+            
+            h=0
+            b=0
+            
+            for i in happy_num :
+                h+=i
+            for i in bad_num :
+                b+=i
+
+            if h>b :
+                color = "Blues"
+            elif b<h:
+                color = "Reds"
+            else:
+                color = "prism"
+            #워드 클라우드 생성
+            comment_txt.makeCommentTxt.comment(search, start_date, end_date, color)
+
+            return render_template("./graph_page.html", value = result,happy_value = happy_num,bad_value = bad_num, value_search = search, search_day = search_day, start_date = start_date, end_date = end_date)
 
 #중간 로딩 페이지
 @app.route('/loding', methods=['GET', 'POST'])

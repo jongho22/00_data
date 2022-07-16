@@ -102,9 +102,9 @@
             <br>
             <hr>
         </div>
-        <div class="row">
+        
             <div class="mb-3">
-                <b>감성분석을 통한 그래프 결과 입니다.</b>
+                <b>감성분석을 통한 {{start_date}} ~ {{end_date}}동안의 그래프 결과 입니다.</b>
             </div>
             
                 <div class="container" style="width: 50%;">
@@ -125,8 +125,17 @@
                     <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
                     </div>
                 </div>
+
+                <div class="container" style="width: 50%;">
+                    <img src="../static/images/{{value_search}}_{{start_date}}_{{end_date}}.jpg" class="card-img-top" alt="..."  onerror="this.src='../static/images/no_photo.png'">
+                    <div class="card-body">
+                    <!-- <h5 class="card-title">Card title</h5> -->
+                    <p class="card-text">수집 한 댓글 빈도</p>
+                    <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                    </div>
+                </div>
             
-        </div>
+        
 
             <!-- 광고 삽입 코드 -->
             <hr>
