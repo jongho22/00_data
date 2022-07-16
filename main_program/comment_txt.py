@@ -3,10 +3,10 @@ from word_cloud import Word_Cloud
 
 class makeCommentTxt:
     def comment(search, start_date, end_date, color):
-        address = "../main_program/txt"
+        address = "../main_program/WordCloud_txt"
 
         #json파일 불러오기
-        with open(f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}__{start_date[:6]}.json', 'r', encoding='UTF-8') as f:
+        with open(f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}.json', 'r', encoding='UTF-8') as f:
             json_data = json.load(f)
 
         #json 파일의 comments들 txt파일로 저장    

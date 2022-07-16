@@ -19,9 +19,6 @@ import comment_txt
 from utils.processing_json import Processing_json
 from utils.predict import Predict 
 
-import matplotlib as mpl
-print(mpl.matplotlib_fname())
-print("-"*10)
 #누적 그래프 결과 페이지
 @app.route('/resultPage', methods=['GET', 'POST'])
 def result() :
@@ -48,8 +45,8 @@ def guide() :
 #모델 실행이 끝난 후 그래프 보여주는 페이지
 @app.route('/graph', methods=['GET', 'POST'])
 def graph():
-    
-    file = f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}__{end_date[:6]}.json'
+
+    file = f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}.json'
     while True :
         if os.path.isfile(file) :
             print("-"*30)
@@ -59,7 +56,7 @@ def graph():
             print("-"*30)
 
             ## 전처리 후 예측
-            processing = Processing_json(f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}__{end_date[:6]}.json')
+            processing = Processing_json(f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}.json')
             processed_dic = processing.dateNList()
 
             print(processed_dic)
@@ -336,7 +333,7 @@ def graph():
 @app.route('/loding', methods=['GET', 'POST'])
 def lode():
     if request.method == 'GET':
-        file = f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}__{end_date[:6]}.json'
+        file = f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}.json'
         while True :
             if os.path.isfile(file) :
                 return render_template("./loding2.html")
@@ -394,7 +391,7 @@ def goo():
             
 
         #크롤러 실행 
-        file = f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}__{end_date[:6]}.json'
+        file = f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}.json'
         threading.Thread(target=start.main, args=(search, start_date, end_date,)).start()
         
         print("[ 스레드 크롤러가 실행 되었습니다. ]")

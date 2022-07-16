@@ -63,7 +63,7 @@ def crawlLinks( search, start_date, end_date, driver_url, chrome_options):
     for process in processes:
         process.join()
 
-    with open(f'result/naver_news/urls_{search}_naver_{start_date}_{end_date}.txt', 'w', encoding='utf8') as f:
+    with open(f'result/naver_news/txt/urls_{search}_naver_{start_date}_{end_date}.txt', 'w', encoding='utf8') as f:
         f.writelines('\n'.join(list(set(list(url_list)))))
 
 
@@ -146,7 +146,7 @@ def crawlNews( search, start_date, end_date, driver_url, chrome_options):
     news_queue = []
 
 
-    with open(f'result/naver_news/urls_{search}_naver_{start_date}_{end_date}.txt', 'r', encoding='utf8', newline='\n') as f:
+    with open(f'result/naver_news/txt/urls_{search}_naver_{start_date}_{end_date}.txt', 'r', encoding='utf8', newline='\n') as f:
         for row in f.readlines():
             row = row.replace('\n', '').replace('\r', '')
             news_queue.append(row)
@@ -244,7 +244,7 @@ def crawlNews( search, start_date, end_date, driver_url, chrome_options):
                 else:
                     continue
 
-        with open(f'result/naver_news/news_{search}_naver_{start_date}_{end_date}__{i}.json', 'w', encoding='utf8') as f:
+        with open(f'result/naver_news/comment_seperate/news_{search}_naver_{start_date}_{end_date}__{i}.json', 'w', encoding='utf8') as f:
             json.dump(dict(news_dic), f, indent=4, sort_keys=True, ensure_ascii=False)
 
 

@@ -155,6 +155,20 @@ def main(search, start_date, end_date):
     naverCrawlLinks(search, start_date, end_date, driver_url, chrome_options)
     naverCrawlNews(search, start_date, end_date, driver_url, chrome_options)
 
+    #json 파일 날짜 합치기
+    json_data = {}
+    for date in range(int(start_date[:6]), int(end_date[:6])+1):
+        date = str(date)
+        print(date)
+        try:
+            with open(f'../main_program/result/naver_news/comment_seperate/news_{search}_naver_{start_date}_{end_date}__{date}.json', 'r', encoding='UTF-8') as f:
+                json_data.update(json.load(f))
+        except:
+            continue
+
+    with open(f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}.json', 'w', encoding='UTF-8') as f:
+        json.dump(json_data, f, indent=4, sort_keys=True, ensure_ascii=False)
+
     dic = {}
     dic2 = {}
         
@@ -171,7 +185,7 @@ def main(search, start_date, end_date):
     all = 0
     for date in dic.keys():
         for company in ["naver"]: #daum은 따로
-            with open(f'result/{company}_news/news_{search}_{company}_{start_date}_{end_date}__{date[:6]}.json','r', encoding='utf8') as f:
+            with open(f'result/{company}_news/news_{search}_{company}_{start_date}_{end_date}.json','r', encoding='utf8') as f:
                 dic2 = json.load(f)
 
             dic[date].update(dic2[date])
