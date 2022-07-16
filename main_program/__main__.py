@@ -321,9 +321,9 @@ def graph():
                 color = "prism"
 
             #워드 클라우드 생성
-            comment_txt.makeCommentTxt.comment(search, start_date, end_date, color)
-
-            return render_template("./graph_page.html", value = result,happy_value = happy_num,bad_value = bad_num, value_search = search, search_day = search_day, start_date = start_date, end_date = end_date)
+            rank = comment_txt.makeCommentTxt.comment(search, start_date, end_date, color)
+            print(rank)
+            return render_template("./graph_page.html", value = result,happy_value = happy_num,bad_value = bad_num, value_search = search, search_day = search_day, start_date = start_date, end_date = end_date, rank = rank)
 
 #중간 로딩 페이지
 @app.route('/loding', methods=['GET', 'POST'])

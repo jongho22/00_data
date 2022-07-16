@@ -21,7 +21,7 @@ class makeCommentTxt:
                     continue
         
         #워드클라우드로 생성
-        Word_Cloud.makeWordCloud(address, search, start_date, end_date, color)
+        rank = Word_Cloud.makeWordCloud(address, search, start_date, end_date, color)
 
-
+        return rank
     #comment("한동훈", "20220622", "20220627")

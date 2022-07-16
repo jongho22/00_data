@@ -36,7 +36,6 @@ class Word_Cloud:
         #1,2,3 순위 저장
         counts1 = Counter(n_adj)
         tags1 = counts1.most_common(3)
-        print("1, 2, 3순위", tags1)
 
          #원 모형으로 그리기
         x, y = np.ogrid[:600, :600]
@@ -50,3 +49,5 @@ class Word_Cloud:
         wc = WordCloud(font_path='C:/WINDOWS/FONTS/MALGUN.TTF',background_color='white',max_font_size=100, colormap=color, mask=mask)
         cloud = wc.generate_from_frequencies(dict(tags))
         cloud.to_file(f'../main_program/static/images/{search}_{start_date}_{end_date}.jpg')
+
+        return tags1
