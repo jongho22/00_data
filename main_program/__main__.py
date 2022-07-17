@@ -277,7 +277,7 @@ def graph():
             #resultList = [i for i in resultList[1:len(resultList)] if int(i)%2 == 0]
             plt.xticks(resultList, rotation='70')  # x축 라벨의 이름 pow지움
             plt.ylim([0,100])
-            plt.title(f'{search} 일별 동향 그래프', )  # 그래프 제목 설정
+            #plt.title(f'{search} 일별 동향 그래프', )  # 그래프 제목 설정
             #plt.ylabel('퍼센트',)  # y축에 설명 추가
             plt.tight_layout()
             plt.gca().spines['right'].set_visible(False) #오른쪽 테두리 제거
@@ -285,20 +285,20 @@ def graph():
             plt.gca().spines['left'].set_visible(False) #왼쪽 테두리 제거
             plt.gca().spines['bottom'].set_color('#00517C') #x축 색상
             #plt.gca().set_facecolor('#E6F0F8') #배경색
-            plt.legend(['긍정','부정'], title_fontsize = 10)
+            plt.legend(['긍정','부정'], title_fontsize = 10, loc='upper left')
             plt.savefig(f'../main_program/static/images/{start_date}{end_date}{search}graph.jpg')
             plt.clf()
             # 관심도 그래프
             plt.plot(resultList,all_n,color='green',linestyle='-',marker='o')
             plt.xticks(resultList, rotation='70')  # x축 라벨의 이름 pow지움
-            plt.title(f'{search} 일별 관심도 그래프', )  # 그래프 제목 설정
+            #plt.title(f'{search} 일별 관심도 그래프', )  # 그래프 제목 설정
             plt.ylim([0,max(all_n)])
             plt.tight_layout()
             plt.gca().spines['right'].set_visible(False) #오른쪽 테두리 제거
             plt.gca().spines['top'].set_visible(False) #위 테두리 제거
             plt.gca().spines['left'].set_visible(False) #왼쪽 테두리 제거
             plt.gca().spines['bottom'].set_color('#00517C') #x축 색상
-            plt.legend(['댓글 총 개수'], title_fontsize = 10)
+            plt.legend(['댓글 총 개수'], title_fontsize = 10, loc='upper left')
             plt.savefig(f'../main_program/static/images/{start_date}{end_date}{search}all.jpg')
             plt.clf()
             

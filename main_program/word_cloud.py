@@ -35,7 +35,7 @@ class Word_Cloud:
 
         #1,2,3 순위 저장
         counts1 = Counter(n_adj)
-        tags1 = counts1.most_common(3)
+        tags1 = counts1.most_common(4)
 
          #원 모형으로 그리기
         x, y = np.ogrid[:600, :600]
