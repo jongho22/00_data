@@ -17,3 +17,4 @@ matplotlib
 wordcloud
 konlpy
 openpyxl
+# 00_data
