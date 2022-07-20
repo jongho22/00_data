@@ -35,6 +35,22 @@ def result() :
             
             print(l)
         return render_template("./resultPage.html", search_list = l)
+    
+    if request.method == 'POST':
+        print("POST가 실행 되었습니다. -------------------------")
+        search_r = request.form.get('keyword').replace(' ', '+')
+        start_date_r = request.form.get('start_date')
+        end_date_r = request.form.get('end_date')
+
+        start_date_r = start_date_r[:4] + start_date_r[5:7] + start_date_r[8:]
+        end_date_r = end_date_r[:4] + end_date_r[5:7] + end_date_r[8:]
+
+        print("[검색어, 날짜가 입력 되었습니다.]")
+        print(search_r, start_date_r, end_date_r)
+
+        threading.Thread(target=start.main, args=(search_r, start_date_r, end_date_r,)).start()
+
+        return render_template("./loding.html", search = search_r ,start_date = start_date_r ,end_date = end_date_r)
 
 #사이트 설명 페이지
 @app.route('/guide', methods=['GET', 'POST'])
@@ -404,7 +420,6 @@ def goo():
         
         print("[ 스레드 크롤러가 실행 되었습니다. ]")
 
-        
         return render_template("./loding.html", search = search ,start_date = start_date,end_date = end_date,file = file)
 
 if __name__ == "__main__":
