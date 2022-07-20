@@ -18,12 +18,12 @@ import datetime
 import numpy as np
  
 from tqdm import trange
+from utils.processing_json import Processing_json
 
 import sys
 sys.setrecursionlimit(5000)
 
-from utils.processing_json import Processing_json
-from utils.predict import Predict 
+import warnings
 
 
 def info_time(dic, us_news, kr_news):
@@ -113,6 +113,7 @@ def info_time(dic, us_news, kr_news):
 def main(search, start_date, end_date):
     #if __name__ == "__main__":
     # 크롬 드라이버 링크
+    warnings.filterwarnings(action='ignore')
     driver_url = './chromedriver.exe'
 
     chrome_options = webdriver.ChromeOptions()
@@ -133,8 +134,6 @@ def main(search, start_date, end_date):
     #search = search # 검색할 키워드
     #start_date = start_date # 검색 기간 시작 날짜
     #end_date = end_date # 검색 기간 종료 날짜
-    
-    search = search.replace(' ', '+')
 
 
     """ 싱글 프로세싱 코드
@@ -165,6 +164,20 @@ def main(search, start_date, end_date):
                 json_data.update(json.load(f))
         except:
             continue
+    
+    #기사없는날 처리
+    m = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+    for date in range(int(start_date), int(end_date)+1):
+        date = str(date)
+        if date not in json_data:
+            if int(date[6:]) < m[int(date[4:6])-1]+1:
+                if date[6:] != "00" and date[4:6] != "00":
+                    json_data[date] = {}
+
+    json_data = dict(sorted(json_data.items()))
+    json_data = Processing_json(json_data)
+    json_data = json_data.dateNList()
 
     with open(f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}.json', 'w', encoding='UTF-8') as f:
         json.dump(json_data, f, indent=4, sort_keys=True, ensure_ascii=False)
@@ -185,10 +198,12 @@ def main(search, start_date, end_date):
     all = 0
     for date in dic.keys():
         for company in ["naver"]: #daum은 따로
-            with open(f'result/{company}_news/news_{search}_{company}_{start_date}_{end_date}.json','r', encoding='utf8') as f:
+            with open(f'result/{company}_news/news_{search}_{company}_{start_date}_{end_date}.json', 'r', encoding='UTF-8') as f:
                 dic2 = json.load(f)
-
-            dic[date].update(dic2[date])
+            try:
+                dic[date].update(dic2[date])
+            except:
+                continue
 
 
     dic2 = {}

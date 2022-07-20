@@ -76,38 +76,57 @@
     
     <!-- 첫번째 줄입니다 -->
     <div class="row">
-        <div class="col-4">
+        <div class="col-3">
             <div class="card" style="width: 100%;">
-                <img src="../static/images/{{word}}happy.jpg" class="card-img-top" alt="..."  onerror="this.src='../static/images/no_photo.png'">
+                <br><br>
+                <img src="../static/images/{{word}}graph.jpg" class="card-img-top" alt="..."  onerror="this.src='../static/images/no_photo.png'">
+                <br><br>
                 <div class="card-body">
                 <!-- <h5 class="card-title">Card title</h5> -->
-                <p class="card-text"><div class="textCenterSet">긍정 동향</div></p>
+                <p class="card-text"><div class="textCenterSet">일별 동향 분석 그래프</div></p>
                 <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
                 </div>
             </div>
         </div>
 
-        <div class="col-4">
+        <div class="col-3">
             <div class="card" style="width: 100%;">
-                <img src="../static/images/{{word}}bad.jpg" class="card-img-top" alt="..."  onerror="this.src='../static/images/no_photo.png'">
-                <div class="card-body">
-                <!-- <h5 class="card-title">Card title</h5> -->
-                <p class="card-text"><div class="textCenterSet">부정 동향</div></p>
-                <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
-                </div>
-            </div>
-        </div>
-
-        <div class="col-4">
-            <div class="card" style="width: 100%;">
+                <br><br>
                 <img src="../static/images/{{word}}all.jpg" class="card-img-top" alt="..."  onerror="this.src='../static/images/no_photo.png'">
+                <br><br>
                 <div class="card-body">
                 <!-- <h5 class="card-title">Card title</h5> -->
-                <p class="card-text"><div class="textCenterSet">일별 관심도</div></p>
+                <p class="card-text"><div class="textCenterSet">일별 관심도 그래프</div></p>
                 <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
                 </div>
             </div>
         </div>
+
+        <div class="col-3">
+            <div class="card" style="width: 100%;">
+                <img src="../static/images/{{ word[16:] }}_{{word[:8]}}_{{word[8:16]}}.jpg" class="card-img-top" alt="..."  onerror="this.src='../static/images/no_photo.png'">
+                <br>
+                <div class="card-body">
+                <!-- <h5 class="card-title">Card title</h5> -->
+                <p class="card-text"><div class="textCenterSet">상위 50개 단어</div></p>
+                <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-3">
+            <div class="card" style="width: 100%;">
+                <br><br>
+                <img src="../static/images/{{word}}circle.jpg" class="card-img-top" alt="..."  onerror="this.src='../static/images/no_photo.png'">
+                <br><br>
+                <div class="card-body">
+                <!-- <h5 class="card-title">Card title</h5> -->
+                <p class="card-text"><div class="textCenterSet">전체적인 여론 퍼센트</div></p>
+                <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                </div>
+            </div>
+        </div>
+
     </div><!-- <div class="row"> -->
     <hr>
     {% endfor %}

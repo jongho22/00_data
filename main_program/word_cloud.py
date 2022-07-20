@@ -7,8 +7,10 @@ class Word_Cloud:
     def makeWordCloud(address, search, start_date, end_date, color):
         # open으로 txt파일을 열고 read()를 이용하여 utf-8 읽는다.
         text = open(f"{address}/{search}_{start_date}_{end_date}.txt", encoding='UTF-8').read() 
-
-
+        
+        if len(text) == 0:
+            text = "NULL"
+        
         # Komoran 함수를 이용해 형태소 분석
         komoran = Komoran()
         line =[]
@@ -28,14 +30,16 @@ class Word_Cloud:
         # 불용어를 제외한 단어만 남기기
         n_adj = [word for word in n_adj if not word in stop_words]
 
+        if text == "NULL":
+            tags = [('NULL', 1)]
+            tags1 = [('NULL', 1), ('NULL', 1), ('NULL', 1), ('NULL', 1)]
+        else:
+            #가장 많이 나온 단어 50개 저장
+            counts = Counter(n_adj)
+            tags = counts.most_common(50)
 
-        #가장 많이 나온 단어 50개 저장
-        counts = Counter(n_adj)
-        tags = counts.most_common(50)
-
-        #1,2,3 순위 저장
-        counts1 = Counter(n_adj)
-        tags1 = counts1.most_common(4)
+            #1, 2, 3, 4 순위 저장
+            tags1 = counts.most_common(4)
 
          #원 모형으로 그리기
         x, y = np.ogrid[:600, :600]

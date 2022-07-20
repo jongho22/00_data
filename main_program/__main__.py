@@ -26,7 +26,7 @@ def result() :
         l = []
         
         # csv파일 읽어서 html로 값 전송
-        with open(f'../main_program/static/search.csv', 'r',newline='', encoding='utf8') as f:
+        with open(f'../main_program/static/search.csv', 'r', newline='', encoding='UTF-8') as f:
             re = csv.reader(f)
 
             for i in re :
@@ -45,7 +45,6 @@ def guide() :
 #모델 실행이 끝난 후 그래프 보여주는 페이지
 @app.route('/graph', methods=['GET', 'POST'])
 def graph():
-
     file = f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}.json'
     while True :
         if os.path.isfile(file) :
@@ -55,10 +54,11 @@ def graph():
             print("[ 감성분석을 시작합니다. ]")
             print("-"*30)
 
-            ## 전처리 후 예측
+            #이모지 제거
             processing = Processing_json(f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}.json')
             processed_dic = processing.dateNList()
 
+            # 전처리 후 예측
             def dic_to_result(processed_dic):   
                 predict = Predict()
 
@@ -87,9 +87,6 @@ def graph():
                     
                     result_happy.append(positive)
                     result_bad.append(negative)
-                    
-                    positive = 0
-                    negative = 0
                 return result_dic,result_happy,result_bad,result_dic2   #ex) {'20220623':70, '20220624':-1(결측값)}
 
             result,happy_num,bad_num,result2 = dic_to_result(processed_dic)
@@ -101,24 +98,24 @@ def graph():
             print(bad_num)
             print(all_num)
 
-            per = []
-            per2 = []
+            positive_rate = []
+            negative_rate = []
 
             for d in result.keys():
                 if result[str(d)] == -1 :
-                    per.append(0)
+                    positive_rate.append(0)
                 else :
-                    per.append(result[str(d)])
+                    positive_rate.append(result[str(d)])
 
             for d in result2.keys():
                 if result2[str(d)] == -1 :
-                    per2.append(0)
+                    negative_rate.append(0)
                 else :
-                    per2.append(result2[str(d)])
+                    negative_rate.append(result2[str(d)])
 
 
-            print(per)
-            print(per2)
+            print(positive_rate)
+            print(negative_rate)
 
             # 그래프 그리기--------------------------------------------
             startDate = start_date
@@ -127,10 +124,10 @@ def graph():
             # 각 날짜를 리스트에 끊어서 저장
             # ex) 20220627 = ['2', '0', '2', '2', '0', '6', '2', '7']
             start_dateList = []
-            for y in (startDate):
+            for y in startDate:
                 start_dateList.append(y)
             last_dateList = []
-            for y in (lastDate):
+            for y in lastDate:
                 last_dateList.append(y)
 
             # string 타입의 리스트를 int 타입으로 변환
@@ -181,7 +178,7 @@ def graph():
             yearList = []
 
             #   1월 2월 3월 4월  5월 6월 7월 8월 9월 10월 11월 12월
-            m = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31,  30,  31]
+            m = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
             # 같은 달일때
             if startMonth == lastMonth and intDate < m[startMonth-1] :
@@ -194,7 +191,7 @@ def graph():
                 # 다른 연도
                 if startYear != lastYear :
                     m_m = lastMonth - startMonth
-                    m_m = abs(abs(m_m)-12)+1
+                    m_m = abs(abs(m_m)-12) + 1
                     for i in range(m_m) :
                         if i == 0 :
                             for j in range(startDay,m[((startMonth-1)+i)-12]+1):
@@ -263,7 +260,7 @@ def graph():
             print(resultList)
 
             #csv저장 = DB역할 
-            with open(f'../main_program/static/search.csv', 'a',newline='', encoding='utf8') as f:
+            with open(f'../main_program/static/search.csv', 'a', newline='', encoding='UTF-8') as f:
                 wr = csv.writer(f)
                 wr.writerow([search,start_date,end_date])
             
@@ -271,8 +268,8 @@ def graph():
 
             plt.clf()
             #그래프
-            plt.plot(resultList,per,color='blue',linestyle='-',marker='o')
-            plt.plot(resultList,per2,color='red',linestyle='-',marker='o')
+            plt.plot(resultList, positive_rate, color='blue', linestyle='-', marker='o')
+            plt.plot(resultList, negative_rate, color='red', linestyle='-', marker='o')
             #plt.plot(resultList,bad,color='red',linestyle='-',marker='o')
             #resultList = [i for i in resultList[1:len(resultList)] if int(i)%2 == 0]
             plt.xticks(resultList, rotation='70')  # x축 라벨의 이름 pow지움
@@ -289,7 +286,7 @@ def graph():
             plt.savefig(f'../main_program/static/images/{start_date}{end_date}{search}graph.jpg')
             plt.clf()
             # 관심도 그래프
-            plt.plot(resultList,all_n,color='green',linestyle='-',marker='o')
+            plt.plot(resultList, all_n,color='green', linestyle='-', marker='o')
             plt.xticks(resultList, rotation='70')  # x축 라벨의 이름 pow지움
             #plt.title(f'{search} 일별 관심도 그래프', )  # 그래프 제목 설정
             plt.ylim([0,max(all_n)])
@@ -302,24 +299,39 @@ def graph():
             plt.savefig(f'../main_program/static/images/{start_date}{end_date}{search}all.jpg')
             plt.clf()
             
-
-
-            # 긍정이 많은지 부정이 많은지 확인 => 워드 클라우드에 사용
-            h=0
-            b=0
+            h = 0
+            b = 0
             
             for i in happy_num :
-                h+=i
+                h += i
             for i in bad_num :
-                b+=i
+                b += i
 
-            if h>b :
+            #원형 그래프 생성
+            if len(all_n) != 0:
+                plt.figure(dpi=200)
+                circle_happy = h/(h + b) * 100 
+                circle_bad = b/(h + b) * 100
+                c_list = []
+                l_list = ["긍정","부정"]
+                colors = ['#288BAB','#ff9999']
+                explode = [0.1,0.1]
+            
+                c_list.append(circle_happy)
+                c_list.append(circle_bad)
+                
+                plt.pie(c_list, labels=l_list, colors=colors, autopct='%.1f%%', startangle=260, counterclock=False, shadow=True, explode=explode, textprops={'size':18}) 
+                plt.savefig(f'../main_program/static/images/{start_date}{end_date}{search}circle.jpg')
+                plt.clf()
+
+            # 긍정이 많은지 부정이 많은지 확인 => 워드 클라우드에 사용
+            if circle_happy > circle_bad :
                 color = "Blues"
-            elif b<h:
+            elif circle_happy < circle_bad:
                 color = "Reds"
             else:
                 color = "prism"
-
+            
             #워드 클라우드 생성
             rank = comment_txt.makeCommentTxt.comment(search, start_date, end_date, color)
             print(rank)
@@ -347,7 +359,7 @@ def goo():
         global end_date
         global file
        
-        search = request.form.get('keyword')
+        search = request.form.get('keyword').replace(' ', '+')
         start_date = request.form.get('start_date')
         end_date = request.form.get('end_date')
         

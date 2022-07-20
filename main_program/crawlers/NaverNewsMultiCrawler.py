@@ -19,6 +19,7 @@ import json
 import sys
 import re
 
+from time import sleep
 from tqdm import trange
 
 from utils.util import *
@@ -27,6 +28,10 @@ from utils.FeedbackCounter import FeedbackCounter
 
 from multiprocessing import Process, Manager, cpu_count
 import numpy as np
+
+import warnings
+# 경고메세지 끄기
+warnings.filterwarnings(action='ignore')
 
 def crawlLinks( search, start_date, end_date, driver_url, chrome_options):
     num_of_cpu = cpu_count()
@@ -63,7 +68,7 @@ def crawlLinks( search, start_date, end_date, driver_url, chrome_options):
     for process in processes:
         process.join()
 
-    with open(f'result/naver_news/txt/urls_{search}_naver_{start_date}_{end_date}.txt', 'w', encoding='utf8') as f:
+    with open(f'result/naver_news/txt/urls_{search}_naver_{start_date}_{end_date}.txt', 'w', encoding='UTF-8') as f:
         f.writelines('\n'.join(list(set(list(url_list)))))
 
 
@@ -142,19 +147,16 @@ def crawlNews( search, start_date, end_date, driver_url, chrome_options):
 
     manager = Manager()
 
-
     news_queue = []
 
-
-    with open(f'result/naver_news/txt/urls_{search}_naver_{start_date}_{end_date}.txt', 'r', encoding='utf8', newline='\n') as f:
+    with open(f'result/naver_news/txt/urls_{search}_naver_{start_date}_{end_date}.txt', 'r', encoding='UTF-8', newline='\n') as f:
         for row in f.readlines():
             row = row.replace('\n', '').replace('\r', '')
             news_queue.append(row)
 
-    # headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"}
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"}
     
     fbc = FeedbackCounter( len(news_queue) )
-    headers = {'User-Agent':'Mozilla/5.0'}
     
     rs = (grequests.get(news_queue[i], headers=headers, callback=fbc.feedback) for i in trange(len(news_queue), file=sys.stdout, desc='get Grequest'))
     a = grequests.map(rs)
@@ -244,7 +246,7 @@ def crawlNews( search, start_date, end_date, driver_url, chrome_options):
                 else:
                     continue
 
-        with open(f'result/naver_news/comment_seperate/news_{search}_naver_{start_date}_{end_date}__{i}.json', 'w', encoding='utf8') as f:
+        with open(f'result/naver_news/comment_seperate/news_{search}_naver_{start_date}_{end_date}__{i}.json', 'w', encoding='UTF-8') as f:
             json.dump(dict(news_dic), f, indent=4, sort_keys=True, ensure_ascii=False)
 
 
@@ -261,7 +263,6 @@ def crawlNewsProcess( idx, driver_url, chrome_options, news_url_list, news_dic, 
                 break
                 
             url = news_url_list.get()
-
 
             count = 0
             count_ += 1
@@ -343,7 +344,7 @@ def crawlNewsProcess( idx, driver_url, chrome_options, news_url_list, news_dic, 
             #         break
 
             try:
-                element = WebDriverWait(driver, 2).until(
+                element = WebDriverWait(driver, 1).until(
                     EC.presence_of_element_located((By.XPATH, '//*[@id="cbox_module"]/div[2]/div[2]/ul/li[1]/span')) 
                 )
 
@@ -355,8 +356,10 @@ def crawlNewsProcess( idx, driver_url, chrome_options, news_url_list, news_dic, 
             div = driver.find_element(By.XPATH,'//*[@id="cbox_module_wai_u_cbox_content_wrap_tabpanel"]')
         
             # comments = div.find_elements_by_xpath('//li[**starts-with(id,"comment")**]')
+            sleep(3)
             comments = div.find_elements(By.CSS_SELECTOR,'ul>li')
-            reply_count = 0
+            # sleep(3)
+            # reply_count = 0
 
             for i in range(len(comments)):
                 comment = comments[i]
@@ -371,17 +374,17 @@ def crawlNewsProcess( idx, driver_url, chrome_options, news_url_list, news_dic, 
                 is_exists_reply = True
 
 
-                try:
-                    element = WebDriverWait(comment, 1).until(
-                        EC.presence_of_element_located((By.CSS_SELECTOR, f'a[class="u_cbox_btn_reply"]')) 
-                    )
-                    reply_count = element.text
-                    if element.text == "답글0":
-                        is_exists_reply = False
+                # try:
+                #     element = WebDriverWait(comment, 1).until(
+                #         EC.presence_of_element_located((By.CSS_SELECTOR, f'a[class="u_cbox_btn_reply"]')) 
+                #     )
+                #     reply_count = element.text
+                #     if element.text == "답글0":
+                #         is_exists_reply = False
 
-                except TimeoutException:
-                    print("답글 버튼 없음 타임아웃")
-                    is_exists_reply = False
+                # except TimeoutException:
+                #     print("답글 버튼 없음 타임아웃")
+                #     is_exists_reply = False
 
                 
                 try:

@@ -1,10 +1,3 @@
-# 
-# util.py
-# Author : Ji-yong219
-# Project Start:: 2020.12.18
-# Last Modified from Ji-yong 2021.06.22
-#
-
 import calendar, datetime
 
 def daterange(start_date, end_date):
