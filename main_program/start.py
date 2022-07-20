@@ -176,8 +176,6 @@ def main(search, start_date, end_date):
                     json_data[date] = {}
 
     json_data = dict(sorted(json_data.items()))
-    json_data = Processing_json(json_data)
-    json_data = json_data.dateNList()
 
     with open(f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}.json', 'w', encoding='UTF-8') as f:
         json.dump(json_data, f, indent=4, sort_keys=True, ensure_ascii=False)

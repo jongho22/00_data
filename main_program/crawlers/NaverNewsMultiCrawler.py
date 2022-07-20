@@ -80,7 +80,7 @@ def crawlLinksProcess(date_list, driver_url, chrome_options, search, url_list):
     for date_ in date_list:
         url_page_num = 1
 
-        while True:
+        for _ in range(2):
             date__ = str(date_).replace('-', '.')
             date___ = str(date_).replace('-', '')
             url = f'https://search.naver.com/search.naver?where=news&sm=tab_pge&query={search}&sort=2&photo=0&field=0&pd=3&ds={date__}&de={date__}&mynews=0&office_type=0&office_section_code=0&news_office_checked=&nso=so:r,p:from{date___}to{date___},a:all&start={url_page_num}'
