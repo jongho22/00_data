@@ -11,6 +11,7 @@ import os, glob, time
 import start
 from tqdm import tqdm
 from matplotlib import font_manager, rc 
+import numpy as np
 fn_name = font_manager.FontProperties(fname='c:/Windows/Fonts/malgun.ttf').get_name()
 rc('font',family=fn_name)
 import csv
@@ -134,142 +135,25 @@ def graph():
             print(negative_rate)
 
             # 그래프 그리기--------------------------------------------
-            startDate = start_date
-            lastDate = end_date
 
-            # 각 날짜를 리스트에 끊어서 저장
-            # ex) 20220627 = ['2', '0', '2', '2', '0', '6', '2', '7']
-            start_dateList = []
-            for y in startDate:
-                start_dateList.append(y)
-            last_dateList = []
-            for y in lastDate:
-                last_dateList.append(y)
+            syear = start_date[0:4]
+            smonth = start_date[4:6]
+            sday = start_date[6:]
+            strStartDate = syear + "-" + smonth + "-" + sday
 
-            # string 타입의 리스트를 int 타입으로 변환
-            start_dateList = list(map(int, start_dateList))
-            last_dateList = list(map(int, last_dateList))
+            lyear = end_date[0:4]
+            lmonth = end_date[4:6]
+            lday = end_date[6:]
+            strLastDate = lyear + "-" + lmonth + "-" + lday
 
-            # 시작 날짜 정리
-            thousand = start_dateList[0] * 1000
-            hundred = start_dateList[1] * 100
-            yten = start_dateList[2] * 10
-            yone = start_dateList[3]
-            mten = start_dateList[4] * 10
-            mone = start_dateList[5]
-            dten = start_dateList[6] * 10
-            done = start_dateList[7]
-            startYear = thousand + hundred + yten + yone
-            startMonth = mten + mone
-            startDay = dten + done
+            dateStartDate = np.array(strStartDate, dtype=np.datetime64)
+            dateLastDate = np.array(strLastDate, dtype=np.datetime64)
+            c = dateLastDate - dateStartDate
 
-            # 마지막 날짜 정리
-            thousand = last_dateList[0] * 1000
-            hundred = last_dateList[1] * 100
-            yten = last_dateList[2] * 10
-            yone = last_dateList[3]
-            mten = last_dateList[4] * 10
-            mone = last_dateList[5]
-            dten = last_dateList[6] * 10
-            done = last_dateList[7]
-            lastYear = thousand + hundred + yten + yone
-            lastMonth = mten + mone
-            lastDay = dten + done
+            tempList = [dateStartDate + np.arange(c + 1)]
+            resultList = tempList[0]
+            resultList = resultList.tolist()
 
-            # datetime으로 적용
-            startday = datetime.date(startYear, startMonth, startDay)
-            lastday = datetime.date(lastYear, lastMonth, lastDay)
-
-            # 두 날짜간 차이 계산
-            dateResult = startday - lastday
-            dateResult = abs(dateResult)
-
-            # 날짜형 -> 문자형 변환 후 날짜간 차이를 정수형으로 저장
-            strDate = str(dateResult)
-            sstrDate = strDate.split(' ')
-            intDate = int(sstrDate[0])      # 날짜간 차이(정수형)
-
-            monthList = []      # 사용자가 지정한 month의 리스트
-            dateList = []       # 사용자가 지정한 day의 리스트
-            yearList = []
-
-            #   1월 2월 3월 4월  5월 6월 7월 8월 9월 10월 11월 12월
-            m = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-
-            # 같은 달일때
-            if startMonth == lastMonth and intDate < m[startMonth-1] :
-                for i in range(startDay,lastDay+1) :
-                    dateList.append(i)
-                    monthList.append(startMonth)
-                    yearList.append(startYear)
-            # 다른 달일때
-            elif startMonth != lastMonth :
-                # 다른 연도
-                if startYear != lastYear :
-                    m_m = lastMonth - startMonth
-                    m_m = abs(abs(m_m)-12) + 1
-                    for i in range(m_m) :
-                        if i == 0 :
-                            for j in range(startDay,m[((startMonth-1)+i)-12]+1):
-                                dateList.append(j)
-                                monthList.append((startMonth-1)+i+1)
-                                yearList.append(startYear)
-
-                        elif 0<i<m_m-1:
-                            for j in range(1,m[((startMonth-1)+i)-12]+1):
-                                dateList.append(j)
-                                monthList.append(i)
-                                
-                                if ((startMonth-1)+i-12+1) < startMonth :
-                                    yearList.append(lastYear)
-                                
-
-                        else :
-                            for j in range(1,lastDay+1):
-                                dateList.append(j)
-                                yearList.append(lastYear)
-                                monthList.append(i)            
-                # 같은 연도
-                else :
-                    m_m = lastMonth - startMonth +1
-                    for i in range(m_m) :
-                        if i == 0 :
-                            for j in range(startDay,m[startMonth-1]+1):
-                                dateList.append(j)
-                                monthList.append(startMonth)
-                                yearList.append(startYear)
-                        elif 0<i<m_m-1:
-                            for j in range(1,m[startMonth-1+i]+1):
-                                dateList.append(j)
-                                monthList.append(startMonth+i)
-                                yearList.append(startYear)
-                        else :
-                            for j in range(1,lastDay+1):
-                                dateList.append(j)
-                                monthList.append((lastMonth-1)+1)
-                                yearList.append(startYear)
-
-            # 정수형 리스트를 문자열 리스트로 변환
-            str_month_list = list(map(str, monthList))
-            str_date_list = list(map(str, dateList))
-            str_year_list = list(map(str, yearList))
-
-            # n월 n일 형태로 출력
-            listLen = len(str_month_list)
-            resultList = []
-            for i in range(listLen):
-                if len(str_month_list[i]) != 2 and len(str_date_list[i]) != 2 :
-                    resultList.append(str_year_list[i]+"0"+str_month_list[i]+ "0"+str_date_list[i])
-                elif len(str_month_list[i]) != 2 and len(str_date_list[i]) == 2 :
-                    resultList.append(str_year_list[i]+"0"+str_month_list[i]+str_date_list[i])
-                elif len(str_month_list[i]) == 2 and len(str_date_list[i]) != 2 :
-                    resultList.append(str_year_list[i]+str_month_list[i]+"0"+str_date_list[i])
-                else :
-                    resultList.append(str_year_list[i]+str_month_list[i]+ str_date_list[i])
-
-            #html에 보내줄 값 저장
-            #happy = happy_num
-            #bad = bad_num
             all_n = all_num
             search_day = start_date + end_date + search 
             
