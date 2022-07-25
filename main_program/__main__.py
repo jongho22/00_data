@@ -16,6 +16,7 @@ fn_name = font_manager.FontProperties(fname='c:/Windows/Fonts/malgun.ttf').get_n
 rc('font',family=fn_name)
 import csv
 import comment_txt
+from openpyxl import Workbook
 
 from utils.processing_json import Processing_json
 from utils.predict import Predict 
@@ -79,6 +80,10 @@ def graph():
             def dic_to_result(processed_dic):   
                 predict = Predict()
 
+                write_wb = Workbook()
+                write_ws = write_wb.create_sheet('버트 전처리')
+                write_ws = write_wb.active
+                
                 result_dic = {}
                 result_dic2 = {}
                 result_happy = []
@@ -91,10 +96,16 @@ def graph():
                     if len(processed_dic[key]) == 0:
                         missing_value = True
                     for comment in processed_dic[key]:
-                        if predict.predict(comment):
+                        result = predict.predict(comment)
+                        if result == 1:
                             positive +=1
                         else:
                             negative +=1
+
+                        number = positive + negative
+                        write_ws[f'A{number}'] = result
+                        write_ws[f'B{number}'] = comment
+                        
                     if missing_value:
                         result_dic[key] = -1
                         result_dic2[key] = -1
@@ -104,6 +115,8 @@ def graph():
                     
                     result_happy.append(positive)
                     result_bad.append(negative)
+
+                write_wb.save(f'../main_program/result/naver_news/bert_result/{search}_naver_{start_date}_{end_date}.xlsx')
                 return result_dic,result_happy,result_bad,result_dic2   #ex) {'20220623':70, '20220624':-1(결측값)}
 
             result,happy_num,bad_num,result2 = dic_to_result(processed_dic)

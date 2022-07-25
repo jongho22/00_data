@@ -80,7 +80,7 @@ def crawlLinksProcess(date_list, driver_url, chrome_options, search, url_list):
     for date_ in date_list:
         url_page_num = 1
 
-        for _ in range(2):
+        while True:
             date__ = str(date_).replace('-', '.')
             date___ = str(date_).replace('-', '')
             url = f'https://search.naver.com/search.naver?where=news&sm=tab_pge&query={search}&sort=2&photo=0&field=0&pd=3&ds={date__}&de={date__}&mynews=0&office_type=0&office_section_code=0&news_office_checked=&nso=so:r,p:from{date___}to{date___},a:all&start={url_page_num}'
@@ -167,7 +167,7 @@ def crawlNews( search, start_date, end_date, driver_url, chrome_options):
         soup = None
 
         if a[i] is not None:
-            soup = (a[i].url,bs(a[i].content, 'html.parser'))
+            soup = (a[i].url,bs(a[i].content, 'lxml'))
 
         if soup is None or len(soup)<2:
             continue
