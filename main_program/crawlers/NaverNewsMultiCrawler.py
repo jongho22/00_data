@@ -68,6 +68,13 @@ def crawlLinks( search, start_date, end_date, driver_url, chrome_options):
     for process in processes:
         process.join()
 
+    #연애 및 스포츠 기사 제거
+    sub_list = []
+    for news_link in url_list:
+        if "https://sports.news.naver.com" not in news_link and "https://entertain.naver.com" not in news_link:
+            sub_list.append(news_link)
+    url_list = sub_list
+
     with open(f'result/naver_news/txt/urls_{search}_naver_{start_date}_{end_date}.txt', 'w', encoding='UTF-8') as f:
         f.writelines('\n'.join(list(set(list(url_list)))))
 

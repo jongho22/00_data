@@ -18,7 +18,7 @@ import datetime
 import numpy as np
  
 from tqdm import trange
-from utils.processing_json import Processing_json
+import utils.processing_json as Processing_json
 
 import sys
 sys.setrecursionlimit(5000)
@@ -176,6 +176,8 @@ def main(search, start_date, end_date):
                     json_data[date] = {}
 
     json_data = dict(sorted(json_data.items()))
+    #이모지 제거
+    json_data = Processing_json.dateNList(json_data)
 
     with open(f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}.json', 'w', encoding='UTF-8') as f:
         json.dump(json_data, f, indent=4, sort_keys=True, ensure_ascii=False)

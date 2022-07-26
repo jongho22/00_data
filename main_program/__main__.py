@@ -2,10 +2,10 @@ from flask import Flask, request, render_template
 import threading
 import start
 from datetime import datetime
-import datetime
 import json
 app = Flask(__name__)
 import matplotlib.pyplot as plt
+plt.switch_backend('agg')
 import random
 import os, glob, time
 import start
@@ -18,8 +18,7 @@ import csv
 import comment_txt
 from openpyxl import Workbook
 
-from utils.processing_json import Processing_json
-from utils.predict import Predict 
+from utils.predict import Predict
 
 #누적 그래프 결과 페이지
 @app.route('/resultPage', methods=['GET', 'POST'])
@@ -72,9 +71,8 @@ def graph():
             print("[ 감성분석을 시작합니다. ]")
             print("-"*30)
 
-            #이모지 제거
-            processing = Processing_json(f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}.json')
-            processed_dic = processing.dateNList()
+            with open(f'result/naver_news/news_{search}_naver_{start_date}_{end_date}.json', 'r', encoding='UTF-8') as f:
+                processed_dic = json.load(f)
 
             # 전처리 후 예측
             def dic_to_result(processed_dic):   
@@ -88,30 +86,36 @@ def graph():
                 result_dic2 = {}
                 result_happy = []
                 result_bad = []
+                number = 1
 
-                for key in processed_dic.keys():
+                for date in processed_dic:
                     missing_value = False
                     positive = 0
                     negative = 0
-                    if len(processed_dic[key]) == 0:
+                    if len(processed_dic[date]) == 0:
                         missing_value = True
-                    for comment in processed_dic[key]:
-                        result = predict.predict(comment)
-                        if result == 1:
-                            positive +=1
-                        else:
-                            negative +=1
+                        continue
+                    for url in processed_dic[date]:
+                        for comments in processed_dic[date][url]:
+                            if len(comments) == 0:
+                                continue
+                            for i in range(len(processed_dic[date][url][comments])):
+                                result = predict.predict(processed_dic[date][url][comments][i])
+                                if result == 1:
+                                    positive +=1
+                                else:
+                                    negative +=1
 
-                        number = positive + negative
-                        write_ws[f'A{number}'] = result
-                        write_ws[f'B{number}'] = comment
+                                write_ws[f'A{number}'] = result
+                                write_ws[f'B{number}'] = processed_dic[date][url][comments][i]
+                                number += 1
                         
                     if missing_value:
-                        result_dic[key] = -1
-                        result_dic2[key] = -1
+                        result_dic[date] = -1
+                        result_dic2[date] = -1
                     else:
-                        result_dic[key] = round(positive/(positive+negative)*100)
-                        result_dic2[key] = round(negative/(positive+negative)*100)
+                        result_dic[date] = round(positive/(positive+negative)*100)
+                        result_dic2[date] = round(negative/(positive+negative)*100)
                     
                     result_happy.append(positive)
                     result_bad.append(negative)
@@ -195,7 +199,7 @@ def graph():
             plt.gca().spines['left'].set_visible(False) #왼쪽 테두리 제거
             plt.gca().spines['bottom'].set_color('#00517C') #x축 색상
             #plt.gca().set_facecolor('#E6F0F8') #배경색
-            plt.legend(['긍정','부정'], title_fontsize = 10, loc='upper left')
+            plt.legend(['긍정률','부정률'], title_fontsize = 10, loc='upper left')
             plt.savefig(f'../main_program/static/images/{start_date}{end_date}{search}graph.jpg')
             plt.clf()
             # 관심도 그래프
@@ -321,4 +325,6 @@ def goo():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="80",debug=False, threaded=True )
+    from gevent import monkey
+    monkey.patch_all()
 
