@@ -204,8 +204,7 @@ def main(search, start_date, end_date):
                 dic[date].update(dic2[date])
             except:
                 continue
-
-
+            
     dic2 = {}
     for date in dic.keys():
         if date[:6] not in dic2.keys():

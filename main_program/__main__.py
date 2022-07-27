@@ -89,28 +89,35 @@ def graph():
                 number = 1
 
                 for date in processed_dic:
-                    missing_value = False
+                    link_exitence = True
+                    text_exitence = False
                     positive = 0
                     negative = 0
-                    if len(processed_dic[date]) == 0:
-                        missing_value = True
-                        continue
-                    for url in processed_dic[date]:
-                        for comments in processed_dic[date][url]:
-                            if len(comments) == 0:
-                                continue
-                            for i in range(len(processed_dic[date][url][comments])):
-                                result = predict.predict(processed_dic[date][url][comments][i])
-                                if result == 1:
-                                    positive +=1
+                    if len(processed_dic[date]) == 0: #링크가 없으면 결측값 
+                        link_exitence = False
+                    else:
+                        for url in processed_dic[date]:
+                            for comments in processed_dic[date][url]:
+                                print("1", "_"*50)
+                                print(comments)
+                                print("1", "_"*50)
+                                if len(comments) == 0: #링크는 있는데 댓글이 없으면 결측값
+                                    if text_exitence != True:
+                                        text_exitence = False
                                 else:
-                                    negative +=1
+                                    text_exitence = True
+                                    for i in range(len(processed_dic[date][url][comments])):
+                                        result = predict.predict(processed_dic[date][url][comments][i])
+                                        if result == 1:
+                                            positive +=1
+                                        else:
+                                            negative +=1
 
-                                write_ws[f'A{number}'] = result
-                                write_ws[f'B{number}'] = processed_dic[date][url][comments][i]
-                                number += 1
+                                        write_ws[f'A{number}'] = result
+                                        write_ws[f'B{number}'] = processed_dic[date][url][comments][i]
+                                        number += 1
                         
-                    if missing_value:
+                    if link_exitence == False or text_exitence == False:
                         result_dic[date] = -1
                         result_dic2[date] = -1
                     else:
@@ -121,7 +128,7 @@ def graph():
                     result_bad.append(negative)
 
                 write_wb.save(f'../main_program/result/naver_news/bert_result/{search}_naver_{start_date}_{end_date}.xlsx')
-                return result_dic,result_happy,result_bad,result_dic2   #ex) {'20220623':70, '20220624':-1(결측값)}
+                return result_dic, result_happy, result_bad, result_dic2   #ex) {'20220623':70, '20220624':-1(결측값)}
 
             result,happy_num,bad_num,result2 = dic_to_result(processed_dic)
             all_num = [x+y for x,y in zip(happy_num, bad_num)]
@@ -185,8 +192,8 @@ def graph():
 
             plt.clf()
             #그래프
-            plt.plot(resultList, positive_rate, color='blue', linestyle='-')
-            plt.plot(resultList, negative_rate, color='red', linestyle='-')
+            plt.plot(resultList, positive_rate, color='blue', linestyle='-', marker='o')
+            plt.plot(resultList, negative_rate, color='red', linestyle='-', marker='o')
             #plt.plot(resultList,bad,color='red',linestyle='-',marker='o')
             #resultList = [i for i in resultList[1:len(resultList)] if int(i)%2 == 0]
             plt.xticks(resultList, rotation='70')  # x축 라벨의 이름 pow지움
@@ -318,13 +325,12 @@ def goo():
         #크롤러 실행 
         file = f'../main_program/result/naver_news/news_{search}_naver_{start_date}_{end_date}.json'
         threading.Thread(target=start.main, args=(search, start_date, end_date,)).start()
-        
+
         print("[ 스레드 크롤러가 실행 되었습니다. ]")
 
         return render_template("./loding.html", search = search ,start_date = start_date,end_date = end_date,file = file)
 
 if __name__ == "__main__":
+    # from gevent import monkey
+    # monkey.patch_all()
     app.run(host="0.0.0.0", port="80",debug=False, threaded=True )
-    from gevent import monkey
-    monkey.patch_all()
-
