@@ -34,7 +34,7 @@ def result() :
                 l.append(i[1]+i[2]+i[0])
             l.reverse()
             
-            print(l)
+            # print(l)
         return render_template("./resultPage.html", search_list = l)
     
     if request.method == 'POST':
@@ -98,10 +98,7 @@ def graph():
                     else:
                         for url in processed_dic[date]:
                             for comments in processed_dic[date][url]:
-                                print("1", "_"*50)
-                                print(comments)
-                                print("1", "_"*50)
-                                if len(comments) == 0: #링크는 있는데 댓글이 없으면 결측값
+                                if len(processed_dic[date][url][comments]) == 0: #링크는 있는데 댓글이 없으면 결측값
                                     if text_exitence != True:
                                         text_exitence = False
                                 else:
