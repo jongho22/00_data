@@ -216,7 +216,7 @@ def graph():
             plt.gca().spines['top'].set_visible(False) #위 테두리 제거
             plt.gca().spines['left'].set_visible(False) #왼쪽 테두리 제거
             plt.gca().spines['bottom'].set_color('#00517C') #x축 색상
-            plt.legend(['댓글 총 개수'], title_fontsize = 10, loc='upper left')
+            plt.legend(['관심도'], title_fontsize = 10, loc='upper left')
             plt.savefig(f'../main_program/static/images/{start_date}{end_date}{search}all.jpg')
             plt.clf()
             
@@ -228,8 +228,9 @@ def graph():
             for i in bad_num :
                 b += i
 
+            color = "prism"
             #원형 그래프 생성
-            if len(all_n) != 0:
+            if len(all_n) != 0 and h != 0 and b != 0:
                 plt.figure(dpi=200)
                 circle_happy = h/(h + b) * 100 
                 circle_bad = b/(h + b) * 100
@@ -245,13 +246,13 @@ def graph():
                 plt.savefig(f'../main_program/static/images/{start_date}{end_date}{search}circle.jpg')
                 plt.clf()
 
-            # 긍정이 많은지 부정이 많은지 확인 => 워드 클라우드에 사용
-            if circle_happy > circle_bad :
-                color = "Blues"
-            elif circle_happy < circle_bad:
-                color = "Reds"
-            else:
-                color = "prism"
+                # 긍정이 많은지 부정이 많은지 확인 => 워드 클라우드에 사용
+                if circle_happy > circle_bad :
+                    color = "Blues"
+                elif circle_happy < circle_bad:
+                    color = "Reds"
+                else:
+                    color = "prism"
             
             #워드 클라우드 생성
             rank = comment_txt.makeCommentTxt.comment(search, start_date, end_date, color)
