@@ -163,7 +163,7 @@ def crawlNews( search, start_date, end_date, driver_url, chrome_options):
 
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"}
     
-    fbc = FeedbackCounter( len(news_queue) )
+    fbc = FeedbackCounter(len(news_queue))
     
     rs = (grequests.get(news_queue[i], headers=headers, callback=fbc.feedback) for i in trange(len(news_queue), file=sys.stdout, desc='get Grequest'))
     a = grequests.map(rs)
